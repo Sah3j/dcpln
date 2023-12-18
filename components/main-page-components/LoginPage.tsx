@@ -28,7 +28,7 @@ const LoginPage: React.FC<props> = (props) => {
 
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(`${apiUrl}/token`, {
+      const response = await fetch(`${apiUrl}/api/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: lower_email, password }),

@@ -71,7 +71,7 @@ def refresh_expiring_jwts(response):
         return response
   
 # login
-@app.route('/token', methods=["POST"])
+@app.route('/api/token', methods=["POST"])
 def create_token():
     email = request.json.get("email", None)
     password = request.json.get("password", None).encode('utf-8')
@@ -95,7 +95,7 @@ def create_token():
         return jsonify({'error': str(e)}), 500
 
 # logout
-@app.route("/logout", methods=["POST"])
+@app.route("/api/logout", methods=["POST"])
 def logout():
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
