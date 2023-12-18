@@ -25,11 +25,12 @@ const Taskbar: React.FC<TaskbarProps> = (props) => {
   //handle complete task
   const handleTaskCompletion = async (taskID: number) => {
     let API, consoleMessage
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     if (props.isCompleted === false) {
-      API = `http://127.0.0.1:5000/api/task-completed/${taskID}`;
+      API = `${apiUrl}/api/task-completed/${taskID}`;
       consoleMessage = "Task Comepleted SUccessfully"
     } else {
-      API = `http://127.0.0.1:5000/api/task-not-completed/${taskID}`;
+      API = `${apiUrl}/api/task-not-completed/${taskID}`;
       consoleMessage = "Task marked incomplete successfully"
     }
 

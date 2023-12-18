@@ -26,7 +26,8 @@ const RegistrationForm: React.FC<props> = (props) => {
     const lower_email = email.toLowerCase()
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/register-user', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/api/register-user`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ display_name: name, email: lower_email, password }),

@@ -36,7 +36,8 @@ const CategorySelect: React.FC<props> = (props) => {
   //handle add new category
   const handleAddNewCategory = async() => {
     if (newCategory !== '') {
-      const API='http://127.0.0.1:5000/api/add-category'
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const API=`${apiUrl}/api/add-category`
       const data= {
         'category_title': newCategory,
         'user_id': user.id,

@@ -44,12 +44,14 @@ const AddTaskForm: React.FC<props> = (props) => {
       taskDescription: description,
       category: category,
       note: note,
-      
+
     }
     
     console.log('Task to be added:', task);
 
-    const API = 'http://127.0.0.1:5000/api/add-task'
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+    const API = `${apiUrl}/api/add-task`
 
     try {
       const response = await fetch(API , {

@@ -27,7 +27,8 @@ const DailyTasksMain: React.FC<props> = (props) => {
         const apiDate = format(date, 'yyyy-MM-dd')
         console.log(apiDate)
         try {
-          const API = `http://127.0.0.1:5000/api/fetch-tasks/${user.id}/${apiDate}`;
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          const API = `${apiUrl}/api/fetch-tasks/${user.id}/${apiDate}`;
           const response = await fetch(API);
   
           if (response.ok) {

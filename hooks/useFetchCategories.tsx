@@ -11,7 +11,8 @@ export function useFetchCategories(triggerCategoryFetch: boolean) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const API = `http://127.0.0.1:5000/api/fetch-categories/${user.id}`;
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const API = `${apiUrl}/api/fetch-categories/${user.id}`;
         const response = await fetch(API);
 
         if (response.ok) {

@@ -39,7 +39,8 @@ const EditTask: React.FC<props> = (props) => {
 
   //handle task update request
   const editTask = async () => {
-    const API = 'http://127.0.0.1:5000/api/update-task'
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const API = `${apiUrl}/api/update-task`
 
     const payload = {
       task_id: taskID,
@@ -70,7 +71,8 @@ const EditTask: React.FC<props> = (props) => {
 
   // handle delete task
   const deleteTask = async (taskID: number) => {
-    const API = `http://127.0.0.1:5000/api/delete-task/${taskID}`;
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const API = `${apiUrl}/${taskID}`;
 
     try {
       const response = await fetch(API);
