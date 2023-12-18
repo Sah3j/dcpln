@@ -1,58 +1,80 @@
+'use client'
+
 import React from 'react'
-import { useState } from 'react'
+import EditTask from './EditTask';
 
 // icons
-import { PiNoteBlankFill } from "react-icons/pi";
-import { FaCheck } from "react-icons/fa";
-import { ImCross } from "react-icons/im";
-import { FaPen } from "react-icons/fa";
+import { CheckCircle2 } from 'lucide-react';
 
-const Taskbar = () => {
 
-  const [taskDescription, setTaskDescription] = useState('')
 
-  const [isEdit, setIsEdit] = useState(true)
-  const [hasNote, setHasNote] = useState(false)
+interface TaskbarProps {
+  taskDescription: string,
+  taskID: number,
+  hasNote: boolean,
+  noteDescription: string,
+  isCompleted: boolean,
+  triggerFetch: boolean,
+  setTriggerFetch: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Taskbar: React.FC<TaskbarProps> = (props) => {
+
+  const {taskDescription, taskID, hasNote, noteDescription, isCompleted, triggerFetch, setTriggerFetch} = props
+
+  //handle complete task
+  const handleTaskCompletion = async (taskID: number) => {
+    let API, consoleMessage
+    if (props.isCompleted === false) {
+      API = `http://127.0.0.1:5000/api/task-completed/${taskID}`;
+      consoleMessage = "Task Comepleted SUccessfully"
+    } else {
+      API = `http://127.0.0.1:5000/api/task-not-completed/${taskID}`;
+      consoleMessage = "Task marked incomplete successfully"
+    }
+
+    try {
+      const response = await fetch(API);
+
+      if (response.ok) {
+        console.log(consoleMessage)
+        setTriggerFetch(!props.triggerFetch)
+      } else {
+        console.log('Error changing task status:', response.statusText)
+      }
+    } catch (error) {
+      console.log('Task status update error:', error)
+    }
+  }
 
   return (
-    <div className='border-b border-blue-50'>
+    <div className=''>
       <div className='flex items-center'>
-        <div onClick={() => setHasNote(true)}>
-          <PiNoteBlankFill/>
+        <div onClick={() => handleTaskCompletion(taskID)}
+          className={`${isCompleted && 'text-green-500'}`}>
+          <CheckCircle2 size={20}/>
         </div>
-        <div className="flex flex-grow items-center justify-between p-2 text-blue-50">
-          {isEdit ? (
-            <>
-              <input placeholder='Enter category title...' className='bg-transparent placeholder-blue-200 w-full border-b focus:outline-none'
-                value={taskDescription}
-                onChange={(e) => setTaskDescription(e.target.value)}/>
-            </>
-          ) : (
-            <>
-              <h1>{taskDescription}</h1>
-            </>
-          )}
-          
-          <div className="flex">
-            <div className="mr-2 text-green-700">
-              <FaCheck />
-            </div>
-            <div className="mr-2 text-slate-950"
-              onClick={() => setIsEdit(!isEdit)}>
-              <FaPen />
-            </div>
-            <div className="text-red-700">
-              <ImCross />
-            </div>
+        <div className="flex flex-grow items-center justify-between ml-2">
+          <p className={`leading-7 [&:not(:first-child)]:mt-6 ${isCompleted && 'line-through text-muted-foreground'}`}>
+            {taskDescription}
+          </p>
+          <div>
+            <EditTask
+              taskID={taskID} 
+              taskDescription={taskDescription} 
+              hasNote={hasNote} 
+              noteDescription={noteDescription}
+              triggerFetch={triggerFetch} 
+              setTriggerFetch={setTriggerFetch}
+            />
           </div>
         </div>
       </div>
       { hasNote && (
-        <div className='flex bg-blue-200'>
-          <textarea placeholder='enter task notes...' className='w-full rounded bg-transparent p-2 focus:outline-none'/>
-          <div className="text-blue-500 p-2" onClick={() => setHasNote(false)}>
-              <ImCross size={12}/>
-          </div>
+        <div className='flex rounded'>
+          <p className={`text-sm italic text-muted-foreground ${isCompleted && 'line-through'}`}>
+            {noteDescription}
+          </p>
         </div>
       )}
     </div>

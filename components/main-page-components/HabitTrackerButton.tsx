@@ -7,12 +7,13 @@ interface Props {
 
 const HabitTrackerButton: React.FC<Props> = ({ activePage }) => {
   return (
-    <div className={`flex flex-row md:flex-col justify-center items-center rounded border border-blue-400 text-blue-400 hover:text-blue-600 hover:border-blue-600 p-4
-      ${activePage === 'habitTracker' && 'bg-blue-700 text-blue-50 pointer-events-none'}`}>
+    <div className={`flex flex-col justify-center items-center rounded border px-4 py-2
+    ${activePage === 'habitTracker' ? 'bg-neutral-700 text-neutral-100 pointer-events-none' : 
+    'border-neutral-700 text-neutral-700'}`}>
       <div className="">
-        <MdDateRange size={30}/>
+        <MdDateRange size={24}/>
       </div>
-      <h1 className="text-md md:text-lg font-bold ml-2">
+      <h1 className="text-md font-bold ml-2">
         Habit Tracker
       </h1>
     </div>

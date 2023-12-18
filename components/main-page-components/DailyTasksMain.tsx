@@ -1,16 +1,74 @@
-import TaskCategoryCard from "./TaskCategoryCard"
+'use client'
 
-//icon
-import { FaPlus } from "react-icons/fa";
+import React from 'react';
+import { format } from 'date-fns'
+import { useEffect, useState } from "react";
+import AddTaskForm from "./AddTaskForm";
+import DatePicker from "./DatePicker";
+import CategoryCard from './CategoryCard';
+import { useAuth } from '@/context/AuthContext';
 
-const DailyTasksMain = () => {
+interface props {
+  date: Date | undefined
+}
+
+const DailyTasksMain: React.FC<props> = (props) => {
+
+  const { user } = useAuth()
+
+  const {date} = props
+
+  const [categories, setCategories] = useState([]);
+  const [triggerFetch, setTriggerFetch] = useState(false);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      if (date) {
+        const apiDate = format(date, 'yyyy-MM-dd')
+        console.log(apiDate)
+        try {
+          const API = `http://127.0.0.1:5000/api/fetch-tasks/${user.id}/${apiDate}`;
+          const response = await fetch(API);
+  
+          if (response.ok) {
+            const data = await response.json();
+            setCategories(data);
+          } else {
+            console.error('Error fetching categories:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Fetch error:', error);
+        }
+      }
+    };
+
+    fetchCategories();
+  }, [date, user.id, triggerFetch])
+
   return (
-    <div>
-      <div className="flex justify-center items-center p-4 m-2 bg-blue-50 rounded-lg text-blue-700 sm:w-48 hover:cursor-pointer hover:drop-shadow-md">
-        <FaPlus size={18}/>
-        <p className="ml-2 select-none">Add Category</p>
+    <div className="flex flex-col h-full justify-between">
+      <div className=''>
+        <div className=''>
+          {
+            categories.map((category) => {
+              const { categoryID, categoryTasks, categoryTitle } = category
+              return (
+                <div key={categoryID}>
+                  <CategoryCard 
+                    categoryTitle={categoryTitle} 
+                    categoryTasks={categoryTasks}
+                    triggerFetch={triggerFetch} 
+                    setTriggerFetch={setTriggerFetch}
+                    />
+                </div>
+              )
+            })
+          }
+        </div>
       </div>
-      <TaskCategoryCard/>
+      <div className="fixed left-0 bottom-0 w-full z-20 p-2 sm:px-8 md:px-14 xl:px-48 bg-background">
+          <AddTaskForm triggerFetch={triggerFetch} setTriggerFetch={setTriggerFetch}/>
+      </div>
     </div>
   )
 }
