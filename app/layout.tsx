@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ui/theme-provider'
@@ -10,6 +9,9 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'DCPLN.',
   description: 'Manage your tasks and stay disciplined.',
+  appleWebApp: {
+    title: "DCPLN."
+  }
 }
 
 export default function RootLayout({
@@ -19,9 +21,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Head>
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-      </Head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
