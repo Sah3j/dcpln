@@ -72,7 +72,7 @@ const EditTask: React.FC<props> = (props) => {
   // handle delete task
   const deleteTask = async (taskID: number) => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    const API = `${apiUrl}/${taskID}`;
+    const API = `${apiUrl}/api/${taskID}`;
 
     try {
       const response = await fetch(API);
